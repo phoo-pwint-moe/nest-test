@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Blog, BlogDocument } from './blog.schema';
+import { CreateBlogDto } from './dto/create-blog.dto';
+import { UpdateBlogDto } from './dto/update-blog.dto';
 
 @Injectable()
 export class BlogService {
@@ -15,13 +17,13 @@ export class BlogService {
     return this.blogModel.findById(id).exec();
   }
 
-  async create(data: Partial<Blog>): Promise<Blog> {
-    const newBlog = new this.blogModel(data);
+  async create(dto: CreateBlogDto): Promise<Blog> {
+    const newBlog = new this.blogModel(dto);
     return newBlog.save();
   }
 
-  async update(id: string, data: Partial<Blog>): Promise<Blog | null> {
-    return this.blogModel.findByIdAndUpdate(id, data, { new: true }).exec();
+  async update(id: string, dto: UpdateBlogDto): Promise<Blog | null> {
+    return this.blogModel.findByIdAndUpdate(id, dto, { new: true }).exec();
   }
 
   async remove(id: string): Promise<any> {

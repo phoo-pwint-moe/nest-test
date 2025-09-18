@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserDocument> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const user = new this.userModel({
       username: createUserDto.username,
@@ -18,14 +18,11 @@ export class UserService {
     return user.save();
   }
 
-  async findByUsername(username: string): Promise<UserDocument | null> {
+  async findByUsername(username: string): Promise<User | null> {
     return this.userModel.findOne({ username }).exec();
   }
 
-  async validateUser(
-    username: string,
-    password: string,
-  ): Promise<UserDocument | null> {
+  async validateUser(username: string, password: string): Promise<User | null> {
     const user = await this.findByUsername(username);
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;

@@ -8,7 +8,7 @@ export class Blog {
   @Prop({ required: true })
   title: string;
 
-  @Prop()
+  @Prop({ required: true })
   content: string;
 }
 
